@@ -1,0 +1,7 @@
+{
+  "name": "links-ui-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
