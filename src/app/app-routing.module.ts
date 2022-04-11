@@ -4,13 +4,17 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'custom',
+    redirectTo: 'links',
     pathMatch: 'full'
   },
   {
     path: 'custom',
     loadChildren: () => import('./custom/custom.module').then( m => m.CustomPageModule)
-  }
+  },
+  {
+    path: 'links',
+    loadChildren: () => import('links-lib').then( m => m.LinksPageModule)
+  },
 ];
 
 @NgModule({

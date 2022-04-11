@@ -6,12 +6,16 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { LinksDataBrokerServiceToken, LinksPageModule } from 'links-lib';
+import { LocalLinksDataBrokerService } from './services/local-links-data-broker/local-links-data-broker.service';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, LinksPageModule],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  // provide the data-broker implementation
+  {provide:LinksDataBrokerServiceToken , useClass:LocalLinksDataBrokerService}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
