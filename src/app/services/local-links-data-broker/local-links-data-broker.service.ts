@@ -21,11 +21,14 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
     super(http,iab,toastCtrl,loadingCtrl,{perPage:CONFIG.paginationOptions.perPage,append:true});
   }
 
+// did you delete package-lock.json no sir I forgot
   getConfig(): LinksDataBrokerConfig {
     return {
         ui:{
           pages:{
-            links:
+            links:{
+              
+            }
           }
         }
     };
