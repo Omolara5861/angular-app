@@ -27,7 +27,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
         ui:{
           pages:{
             links:{
-              
+
             }
           }
         }
