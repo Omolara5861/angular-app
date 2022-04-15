@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { ImplLinksDataBroker, Link, LinksDataBrokerConfig, LinksDataBrokerEvent } from 'links-lib';
-import {ID} from 'app-base-lib';
 
 import * as CONFIG from '../../config/app-config';
 import { CRUD } from 'app-base-lib';
@@ -16,21 +15,19 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 })
 export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
-  constructor( http: HttpClient ,  iab: InAppBrowser, toastCtrl: ToastController,
-     loadingCtrl: LoadingController ) {
-    super(http,iab,toastCtrl,loadingCtrl,{perPage:CONFIG.paginationOptions.perPage,append:true});
+  constructor( http: HttpClient , iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
+    super(http as any,iab,toastCtrl as any,loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:true});
   }
 
-// did you delete package-lock.json no sir I forgot
   getConfig(): LinksDataBrokerConfig {
     return {
-        ui:{
-          pages:{
-            links:{
-              
-            }
+      ui:{
+        pages:{
+          links:{
+            // --
           }
         }
+      }
     };
   }
 
