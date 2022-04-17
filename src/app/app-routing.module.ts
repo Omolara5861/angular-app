@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'links',
-    loadChildren: () => import('links-lib').then( m => m.LinksPageModule)
+    loadChildren: () => import('ionic-ng-links-ui').then( m => m.LinksPageModule)
   },
 ];
 

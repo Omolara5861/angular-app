@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { ImplLinksDataBroker, Link, LinksDataBrokerConfig, LinksDataBrokerEvent } from 'links-lib';
-import {ID} from 'app-base-lib';
+import { ImplLinksDataBroker, Link, LinksDataBrokerConfig,
+  LinksDataBrokerEvent, URL_META_API_LAYER_CONFIG,
+   URL_META_RAPID_API_CONFIG } from 'ionic-ng-links-ui';
 
 import * as CONFIG from '../../config/app-config';
 import { CRUD } from 'app-base-lib';
@@ -10,27 +11,83 @@ import { ListDataBrokerLoadOneOptions } from 'app-base-lib';
 import { ListDataBrokerResult } from 'app-base-lib';
 import { ListDataBrokerLoadOptions } from 'app-base-lib';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { PAGE_SECTION_POSITION } from 'vicky-ionic-ng-lib';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
-  constructor( http: HttpClient ,  iab: InAppBrowser, toastCtrl: ToastController,
-     loadingCtrl: LoadingController ) {
-    super(http,iab,toastCtrl,loadingCtrl,{perPage:CONFIG.paginationOptions.perPage,append:true});
+  constructor( http: HttpClient , iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
+    super(http as any,iab,toastCtrl as any,loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:true});
   }
 
-// did you delete package-lock.json no sir I forgot
   getConfig(): LinksDataBrokerConfig {
     return {
-        ui:{
-          pages:{
-            links:{
-
+      perPage: 10,
+      ui:{
+        general: {
+          spinner: {
+            type: 'bubbles'
+          },
+          toast: {
+            duration: 2000,
+            position: 'top',
+            btnText: 'Okay'
+          },
+          buttons: {
+            core: {
+              sectionPosition: PAGE_SECTION_POSITION.IN_FOOTER
+            }
+          },
+          broswer: {
+            target: 'in-app'
+          }
+        },
+        pages:{
+          links:{
+            title:{
+              label:'Your Links'
+            },
+            reconciliation:{
+              lastTime:new Date( +localStorage.getItem( '--links-last-reconcile-time' ) || undefined),
+              intervalSecs:10 * 60,
+            }
+          },
+          linksDetailEditor:{
+            title:{
+              label:'Add Link'
+            },
+            buttons:{
+              main:{
+                backLabel:'backbtn',
+                nextLabel: 'nextbtn',
+                confirmLabel: 'ok'
+              }
+            },
+            behavior: {
+              urlInfo:{
+                progressMsg: 'Fetching Link Info',
+                successMsg: 'Info fetched successfully'
+              }
             }
           }
         }
+      },
+      thirdParty: {
+        api: {
+          urlMeta: false ? {
+            key: 'aHq2rmRDOvOfR9p9AIx3SnPxSkXIlgpU',
+            service: 'api-layer',
+            url: 'https://api.apilayer.com/meta_tags?url=url',
+          } as URL_META_API_LAYER_CONFIG : {
+            service: 'rapid-api',
+            key: '074f5a08a2mshe29fc16278afaf4p102003jsnc8596d52e2ec',
+            url: 'https://site-metadata.p.rapidapi.com/metadata/',
+            apiHost: 'site-metadata.p.rapidapi.com'
+          } as URL_META_RAPID_API_CONFIG
+        }
+      }
     };
   }
 
