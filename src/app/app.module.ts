@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { LinksDataBrokerServiceToken, LinksPageModule } from 'ionic-ng-links-ui';
 import { LocalLinksDataBrokerService } from './services/local-links-data-broker/local-links-data-broker.service';
 import { HttpClientModule } from '@angular/common/http';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,9 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, LinksPageModule, HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   // provide the data-broker implementation
-  {provide:LinksDataBrokerServiceToken , useClass:LocalLinksDataBrokerService}],
+  {provide:LinksDataBrokerServiceToken , useClass:LocalLinksDataBrokerService},
+
+  InAppBrowser],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
