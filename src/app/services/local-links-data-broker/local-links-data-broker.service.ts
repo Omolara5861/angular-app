@@ -33,13 +33,13 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
             type: 'bubbles'
           },
           toast: {
-            duration: 2000,
+            duration: 5000,
             position: 'top',
             btnText: 'Okay'
           },
           buttons: {
             core: {
-              sectionPosition: PAGE_SECTION_POSITION.IN_FOOTER
+              sectionPosition: PAGE_SECTION_POSITION.IN_CONTENT
             }
           },
           broswer: {
@@ -62,9 +62,9 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
             },
             buttons:{
               main:{
-                backLabel:'backbtn',
-                nextLabel: 'nextbtn',
-                confirmLabel: 'ok'
+                nextLabel: 'next',
+                backLabel:'back',
+                confirmLabel: 'proceed'
               }
             },
             behavior: {
@@ -78,15 +78,15 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       },
       thirdParty: {
         api: {
-          urlMeta: false ? {
-            key: 'aHq2rmRDOvOfR9p9AIx3SnPxSkXIlgpU',
+          urlMeta: true ? {
+            key: 'CiXFC31LtTC2rtO5ArNp4rJchw6WKeKI',
             service: 'api-layer',
-            url: 'https://api.apilayer.com/meta_tags?url=url',
+            url: 'https://api.apilayer.com/meta_tags',
           } as URL_META_API_LAYER_CONFIG : {
             service: 'rapid-api',
-            key: '074f5a08a2mshe29fc16278afaf4p102003jsnc8596d52e2ec',
             url: 'https://site-metadata.p.rapidapi.com/metadata/',
-            apiHost: 'site-metadata.p.rapidapi.com'
+            apiHost: 'site-metadata.p.rapidapi.com',
+            key: 'a398cf8e51mshcdf0d3353264488p1835e8jsnaf1369c53f2b'
           } as URL_META_RAPID_API_CONFIG
         }
       }
