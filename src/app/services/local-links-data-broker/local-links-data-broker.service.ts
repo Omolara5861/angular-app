@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import { ImplLinksDataBroker, Link, LinksDataBrokerConfig,
   LinksDataBrokerEvent, URL_META_API_LAYER_CONFIG,
    URL_META_RAPID_API_CONFIG } from 'ionic-ng-links-ui';
@@ -12,14 +12,17 @@ import { ListDataBrokerResult } from 'app-base-lib';
 import { ListDataBrokerLoadOptions } from 'app-base-lib';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { PAGE_SECTION_POSITION } from 'vicky-ionic-ng-lib';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
-  constructor( http: HttpClient , iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
-    super(http as any,iab,toastCtrl as any,loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:true});
+  constructor( platform: Platform, clipboard: Clipboard, http: HttpClient ,
+    iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
+    super(platform as any, clipboard as any, http as any,iab,toastCtrl as any,
+      loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:true});
   }
 
   getConfig(): LinksDataBrokerConfig {
@@ -52,7 +55,6 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
               label:'Your Links'
             },
             reconciliation:{
-              lastTime:new Date( +localStorage.getItem( '--links-last-reconcile-time' ) || undefined),
               intervalSecs:10 * 60,
             }
           },
@@ -78,7 +80,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       },
       thirdParty: {
         api: {
-          urlMeta: true ? {
+          urlMeta: false ? {
             key: 'CiXFC31LtTC2rtO5ArNp4rJchw6WKeKI',
             service: 'api-layer',
             url: 'https://api.apilayer.com/meta_tags',
@@ -91,10 +93,6 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
         }
       }
     };
-  }
-
-  async onNewReconcileTime(newLastReconcileTime: Date): Promise<void> {
-    localStorage.setItem( '--links-last-reconcile-time' , Date.now().toString());
   }
 
   async onCRUD(crudType: CRUD, link?: Link): Promise<Link>{
@@ -150,7 +148,8 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
    * @param options the options that can be used to fetch the data
    * @returns an object that contains the array of data
    */
-  async fetch(options: ListDataBrokerLoadOptions): Promise<ListDataBrokerResult<Link[]>>{
+  async fetch(options: ListDataBrokerLoadOptions<Link>
+    ): Promise<ListDataBrokerResult<Link[]>>{
 
     let links = await this.getStore();
 

@@ -7,10 +7,7 @@ const routes: Routes = [
     redirectTo: 'links',
     pathMatch: 'full'
   },
-  {
-    path: 'custom',
-    loadChildren: () => import('./custom/custom.module').then( m => m.CustomPageModule)
-  },
+
   {
     path: 'links',
     loadChildren: () => import('ionic-ng-links-ui').then( m => m.LinksPageModule)
