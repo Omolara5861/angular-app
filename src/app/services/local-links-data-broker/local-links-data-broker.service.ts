@@ -22,7 +22,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
   constructor( platform: Platform, clipboard: Clipboard, http: HttpClient ,
     iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
     super(platform as any, clipboard as any, http as any,iab,toastCtrl as any,
-      loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:true});
+      loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
   }
 
   getConfig(): LinksDataBrokerConfig {
@@ -46,7 +46,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
             }
           },
           broswer: {
-            target: 'in-app'
+            target: 'system'
           }
         },
         pages:{
@@ -165,7 +165,10 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
     const storeValue = localStorage.getItem( '--links-array' );
 
-    return storeValue ? JSON.parse(storeValue) : [];
+    const result = (storeValue ? JSON.parse(storeValue) as Array<Link> : []).reverse();
+    console.log(result);
+    return result;
+
   }
 
   private async saveStore(links: Link[]): Promise<any>{
