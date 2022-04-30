@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoadingController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { ImplLinksDataBroker, Link, LinksDataBrokerConfig,
   LinksDataBrokerEvent, URL_META_API_LAYER_CONFIG,
    URL_META_RAPID_API_CONFIG } from 'ionic-ng-links-ui';
@@ -19,9 +19,9 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 })
 export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
-  constructor( platform: Platform, clipboard: Clipboard, http: HttpClient ,
+  constructor( platform: Platform, clipboard: Clipboard,alertCtrl: AlertController, http: HttpClient ,
     iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
-    super(platform as any, clipboard as any, http as any,iab,toastCtrl as any,
+    super(platform as any, clipboard as any, http as any,iab, alertCtrl as any, toastCtrl as any,
       loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
   }
 
@@ -32,6 +32,12 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       },
       ui:{
         general: {
+          pagination:{
+            enabled:true,
+          },
+          swipeRefresh:{
+            enabled:true,
+          },
           spinner: {
             type: 'bubbles'
           },
@@ -119,13 +125,6 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
   }
 
   async on(ev: LinksDataBrokerEvent): Promise<any>{
-  }
-
-  async isPaginationEnabled(): Promise<boolean> {
-    return true;
-  }
-  async isRefreshEnabled(): Promise<boolean> {
-    return true;
   }
 
   async canCRUD(crudType: CRUD): Promise<boolean>{

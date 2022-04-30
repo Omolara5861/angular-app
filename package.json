@@ -30,9 +30,8 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic/angular": "^6.0.0",
     "app-base-lib": "^1.0.33",
-    "ionic-ng-links-ui": "^0.0.29",
     "rxjs": "~6.6.0",
-    "vicky-ionic-ng-lib": "^0.0.26",
+    "vicky-ionic-ng-lib": "^0.0.28",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
