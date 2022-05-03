@@ -23,6 +23,11 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "node_modules/ionic-ng-links-ui/assets",
+                "output": "assets"
+              },
+              {
+                "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
               },
@@ -32,7 +37,7 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": ["node_modules/ionic-ng-links-ui/styles/theme/variables.scss" , "src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
             "aot": false,
             "vendorChunk": true,
@@ -142,6 +147,37 @@
             "ci": {
               "devServerTarget": "app:serve:ci"
             }
+          }
+        }
+      }
+    },
+    "test-lib": {
+      "projectType": "library",
+      "root": "projects/test-lib",
+      "sourceRoot": "projects/test-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/test-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/test-lib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/test-lib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/test-lib/src/test.ts",
+            "tsConfig": "projects/test-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/test-lib/karma.conf.js"
           }
         }
       }

@@ -86,7 +86,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       },
       thirdParty: {
         api: {
-          urlMeta: false ? {
+          urlMeta: true ? {
             key: 'CiXFC31LtTC2rtO5ArNp4rJchw6WKeKI',
             service: 'api-layer',
             url: 'https://api.apilayer.com/meta_tags',
