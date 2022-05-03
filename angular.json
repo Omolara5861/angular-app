@@ -37,7 +37,7 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["node_modules/ionic-ng-links-ui/styles/theme/variables.scss" , "src/theme/variables.scss", "src/global.scss"],
+            "styles": ["node_modules/ionic-ng-links-ui/styles/styles.scss" , "src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
             "aot": false,
             "vendorChunk": true,

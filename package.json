@@ -32,7 +32,7 @@
     "app-base-lib": "^1.0.35",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
-    "vicky-ionic-ng-lib": "^0.0.28",
+    "vicky-ionic-ng-lib": "^0.0.29",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
