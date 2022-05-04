@@ -28,7 +28,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
   getConfig(): LinksDataBrokerConfig {
     return {
       pagination:{
-        perPage: 10,
+        perPage: 6,
       },
       ui:{
         general: {
