@@ -21,7 +21,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
   constructor( platform: Platform, clipboard: Clipboard,alertCtrl: AlertController, http: HttpClient ,
     iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
-    super(platform as any, clipboard as any, http as any,iab, alertCtrl as any, toastCtrl as any,
+    super(platform as any, clipboard as any, http as any,iab, toastCtrl as any, alertCtrl as any,
       loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
   }
 
@@ -86,7 +86,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       },
       thirdParty: {
         api: {
-          urlMeta: true ? {
+          urlMeta: false ? {
             key: 'CiXFC31LtTC2rtO5ArNp4rJchw6WKeKI',
             service: 'api-layer',
             url: 'https://api.apilayer.com/meta_tags',
