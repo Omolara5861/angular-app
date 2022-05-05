@@ -13,6 +13,8 @@ import { ListDataBrokerLoadOptions } from 'app-base-lib';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { PAGE_SECTION_POSITION } from 'vicky-ionic-ng-lib';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { timer } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +27,28 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
   }
 
+  async onLastReconcileTimeUpdateNeeded(...links: Link[]): Promise<Link[]> {
+
+    let storeLinks = await this.getStore();
+
+    storeLinks = storeLinks.map( _link => {
+      const newLink = links.find( link=>link.id === _link.id );
+      return newLink || _link;
+    });
+
+    await this.saveStore(storeLinks);
+
+    return links.map( _link => {
+      const link = {..._link};
+      link.lastReconcileTime = new Date();
+      return link;
+    } );
+  }
+
   getConfig(): LinksDataBrokerConfig {
     return {
       pagination:{
-        perPage: 6,
+        perPage: 7,
       },
       ui:{
         general: {
@@ -143,6 +163,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
       data:links.find( link => link.id === options.id )
     };
   }
+
   /**
    * @param options the options that can be used to fetch the data
    * @returns an object that contains the array of data
@@ -150,24 +171,32 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
   async fetch(options: ListDataBrokerLoadOptions<Link>
     ): Promise<ListDataBrokerResult<Link[]>>{
 
+    console.log('localLinksDataBroker.fetch() : ',options);
+
     let links = await this.getStore();
 
     // apply pagination
     links = links.slice( ( options.page - 1 ) * options.perPage , options.page * options.perPage );
 
-    return {
+    const result = {
       data: links
     };
+
+    console.log('localLinksDataBroker.fetch() result : ',result);
+
+    return result;
   }
 
   private async getStore(): Promise<Link[]>{
 
+    // simulate delay
+    await timer(3000).pipe(first()).toPromise();
+
     const storeValue = localStorage.getItem( '--links-array' );
 
     const result = (storeValue ? JSON.parse(storeValue) as Array<Link> : []).reverse();
-    console.log(result);
+    console.log('localLinksDataBroker.getStore()',result);
     return result;
-
   }
 
   private async saveStore(links: Link[]): Promise<any>{
