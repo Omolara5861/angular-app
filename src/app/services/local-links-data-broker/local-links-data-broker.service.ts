@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { ImplLinksDataBroker, Link, LinksDataBrokerConfig,
   LinksDataBrokerEvent, URL_META_API_LAYER_CONFIG,
    URL_META_RAPID_API_CONFIG } from 'ionic-ng-links-ui';
@@ -21,10 +21,12 @@ import { first } from 'rxjs/operators';
 })
 export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
 
-  constructor( platform: Platform, clipboard: Clipboard,alertCtrl: AlertController, http: HttpClient ,
+  constructor( platform: Platform, clipboard: Clipboard,
+    actionSheetCtrl: ActionSheetController,alertCtrl: AlertController, http: HttpClient ,
     iab: InAppBrowser, toastCtrl: ToastController,loadingCtrl: LoadingController ) {
-    super(platform as any, clipboard as any, http as any,iab, toastCtrl as any, alertCtrl as any,
-      loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
+    super(platform as any, clipboard as any, http as any,
+      iab, actionSheetCtrl as any, alertCtrl as any, toastCtrl as any,
+       loadingCtrl as any,{perPage:CONFIG.paginationOptions.perPage,append:false});
   }
 
   async onLastReconcileTimeUpdateNeeded(...links: Link[]): Promise<Link[]> {
@@ -46,9 +48,9 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
   }
 
   getConfig(): LinksDataBrokerConfig {
-    return {
+    const config: LinksDataBrokerConfig = {
       pagination:{
-        perPage: 7,
+        perPage: 10,
       },
       ui:{
         general: {
@@ -71,7 +73,7 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
               sectionPosition: PAGE_SECTION_POSITION.IN_CONTENT
             }
           },
-          broswer: {
+          browser: {
             target: 'system'
           }
         },
@@ -82,23 +84,53 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
             },
             reconciliation:{
               intervalSecs:10 * 60,
+            },
+            behavior:{
+              parts:{
+                copyToClipboard: {
+                  messages: {
+                    failure: 'Links Copied to Clipboard',
+                    success: 'Failed to Copy Link to Clipboard'
+                  }
+                }
+              }
             }
           },
           linksDetailEditor:{
+
+            behavior:{
+              parts:{
+                urlInfoFetch: {
+                  messages: {
+                    failure: 'Url Info failed to fetch',
+                    success: 'Url Info  fetched'
+                  }
+                }
+              }
+            },
+
+            crud:{
+              create:{
+                input:{
+                  validation:{
+                    requiredValidationMsg:{
+                      message: 'This field is required'
+                    },
+                    patternValidationMsg:{
+                      message: 'Url format is not correct'
+                    },
+                  }
+                }
+              }
+            },
             title:{
               label:'Add Link'
             },
             buttons:{
               main:{
-                nextLabel: 'next',
                 backLabel:'back',
-                confirmLabel: 'proceed'
-              }
-            },
-            behavior: {
-              urlInfo:{
-                progressMsg: 'Fetching Link Info',
-                successMsg: 'Info fetched successfully'
+                confirmLabel: 'proceed',
+                nextLabel: 'next'
               }
             }
           }
@@ -119,7 +151,10 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
         }
       }
     };
+
+    return config;
   }
+  //Sir give me some mins
 
   async onCRUD(crudType: CRUD, link?: Link): Promise<Link>{
 
@@ -197,6 +232,8 @@ export class LocalLinksDataBrokerService extends ImplLinksDataBroker{
     const result = (storeValue ? JSON.parse(storeValue) as Array<Link> : []).reverse();
     console.log('localLinksDataBroker.getStore()',result);
     return result;
+
+
   }
 
   private async saveStore(links: Link[]): Promise<any>{
